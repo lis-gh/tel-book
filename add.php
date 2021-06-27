@@ -29,8 +29,11 @@
 </div>
 <div class="container mt-3">
   <form method="GET" class="w-50" name="sign">
-    <label >The Name</label>
-    <input class="form-control " type="text" placeholder="enter the name" name="nname" required/>
+    <label >First Name</label>
+    <input class="form-control " type="text" placeholder="enter the first name" name="fnname" required/>
+    <label class="mt-3">Last Name</label>
+    <input class="form-control " type="text" placeholder="enter the last name" name="lnname" required/>
+
     <label class="mt-3">Tele-Number</label>
     <input class="form-control " type="text" placeholder="enter the tele number" name="tnum" required/>
     <button class="btn btn-success mt-3 ml-1" type="submit" name="add" onclick="checknum(event)">Add the Number</button>
@@ -42,13 +45,24 @@
       require_once "dbcontact.php";
       session_start();
     $userid=$_SESSION['userid'];
-    $nname=$_GET['nname'];
+    $fnname=$_GET['fnname'];
+    $lnname=$_GET['lnname'];
     $tnum=$_GET['tnum'];
+    $check=$database->prepare("SELECT * FROM nums WHERE fnname='$fnname' AND lnname='$lnname' OR telnum='$tnum'");
+    $check->execute();
+    if($check->rowCount()==0){
 
-    $adduser=$database->prepare("INSERT INTO nums(name, telnum, userid) VALUES('$nname', '$tnum', $userid)");
+    $adduser=$database->prepare("INSERT INTO nums(fnname, lnname, telnum, userid) VALUES('$fnname', '$lnname', '$tnum', $userid)");
     $adduser->execute();
     header("Location:add.php");
-  }
+}
+else{
+    echo '<div class="alert alert-danger w-75 mt-3">
+this name has been added before!
+    </div>';
+}
+
+}
 
 
 ?>

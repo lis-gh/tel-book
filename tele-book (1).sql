@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2021 at 08:11 AM
+-- Generation Time: Jun 19, 2021 at 02:34 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `nums` (
   `numid` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
+  `fnname` varchar(255) DEFAULT NULL,
+  `lnname` varchar(255) NOT NULL,
   `telnum` varchar(10) NOT NULL,
   `userid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -38,12 +39,11 @@ CREATE TABLE `nums` (
 -- Dumping data for table `nums`
 --
 
-INSERT INTO `nums` (`numid`, `name`, `telnum`, `userid`) VALUES
-(2, 'mhd', '912345678', 3),
-(27, 'leeen11', '0912345678', 5),
-(28, 'lena', '0912345678', 7),
-(30, 'ahmd', '0912345678', 7),
-(31, 'mhd', '0912345678', 7);
+INSERT INTO `nums` (`numid`, `fnname`, `lnname`, `telnum`, `userid`) VALUES
+(35, 'mhddd', 'gh', '0912345678', 7),
+(36, 'mhd', 'jjjjjj', '0912245678', 7),
+(37, 'mhd', 'fddd', '0912243678', 7),
+(38, 'fd1125', 'gh', '0912345677', 7);
 
 -- --------------------------------------------------------
 
@@ -70,7 +70,10 @@ INSERT INTO `users` (`userid`, `fname`, `lname`, `city`, `telnum`, `pass`) VALUE
 (3, 'lis', '', '', '912345678', '123'),
 (5, 'lolo', '', '', '0912345678', '1234'),
 (6, 'lolo', '', '', '0912345678', '1234'),
-(7, 'lala', 'gh', 'damas', '0912345678', '123');
+(7, 'lala', 'gh', 'damas', '0912345678', '123'),
+(8, 'gogo', 'gh', 'damas', '0933312345', '1234'),
+(9, 'lana', 'gh', 'damas', '0911223344', '12345'),
+(10, 'lama', 'gh', 'damas', '0911122333', '12345');
 
 --
 -- Indexes for dumped tables
@@ -97,13 +100,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `nums`
 --
 ALTER TABLE `nums`
-  MODIFY `numid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `numid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables

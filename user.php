@@ -30,7 +30,7 @@
   <h2>Welcome to your account</h2>
 
 </div>
-<div class="container bg-light mt-5 text-center p-3 w-50">
+<div class="container bg-secondary mt-5 text-center p-3 w-50">
   <h5>the names that you have added</h5>
 
 </div>
@@ -41,12 +41,13 @@
     require_once "dbcontact.php";
     session_start();
     $userid=$_SESSION['userid'];
-    $show=$database->prepare("SELECT nums.name, nums.telnum, nums.numid FROM nums INNER JOIN users ON nums.userid=users.userid WHERE nums.userid='$userid' ORDER BY nums.name");
+    $show=$database->prepare("SELECT nums.fnname, nums.lnname, nums.telnum, nums.numid FROM nums INNER JOIN users ON nums.userid=users.userid WHERE nums.userid='$userid' ORDER BY nums.fnname");
     $show->execute();
     echo '<table class="table table-dark table-striped mt-4 text-center">
     <thead>
       <tr>
-        <th>name</th>
+        <th>first name</th>
+        <th>last name</th>
         <th>tel</th>
         <th>action</th>
       </tr>
@@ -54,14 +55,15 @@
     <tbody>';
     if($show->rowCount() ==0){
         echo '<tr class="text-center">
-        <td colspan=3 > no result</td>
+        <td colspan=4 > no result</td>
         
       </tr>';
     }
      else{ 
     foreach($show AS $data){
         echo '<tr>
-        <td>'.$data['name'].'</td>
+        <td>'.$data['fnname'].'</td>
+        <td>'.$data['lnname'].'</td>
         <td>'.$data['telnum'].'</td>
         <td><form method="GET">
         <button class="btn btn-danger " type="submit" name="delete" value="'.$data['numid'].'">delete</button>
@@ -112,26 +114,28 @@ elseif(isset($_POST['add'])){
 elseif(isset($_POST['search'])){
     echo '<h2 class="text-center">your search result</h2>';
     $item=$_POST['searchitem'];
-    $searching=$database->prepare("SELECT * FROM nums WHERE name LIKE '%$item%' OR telnum LIKE '%$item%'");
+    $searching=$database->prepare("SELECT * FROM nums WHERE fnname LIKE '%$item%' OR telnum LIKE '%$item%' OR lnname LIKE '%$item%'");
     $searching->execute();
     echo '<table class="table table-striped mt-4 text-center">
     <thead>
       <tr>
-        <th>name</th>
+        <th>first name</th>
+        <th>last name</th>
         <th>tel</th>
       </tr>
     </thead>
     <tbody>';
     if($searching->rowCount() ==0){
         echo '<tr class="text-center">
-        <td colspan=2 > no result</td>
+        <td colspan=3 > no result</td>
         
       </tr>';
     }
      else{ 
     foreach($searching AS $datas){
         echo '<tr>
-        <td>'.$datas['name'].'</td>
+        <td>'.$datas['fnname'].'</td>
+        <td>'.$datas['lnname'].'</td>
         <td>'.$datas['telnum'].'</td>
         
       </tr>';

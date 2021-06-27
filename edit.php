@@ -30,7 +30,7 @@
 
 <div class="container mt-3">
   <form method="GET" class="w-50" >
-    <label >The Name</label>
+    <label >First Name</label>
     <?php
     session_start();
     $numid=$_SESSION['numid'];
@@ -40,24 +40,43 @@
     $getitem=$getitem->fetch(PDO::FETCH_ASSOC);
 
    echo '
-    <input class="form-control " type="text" placeholder="enter the name" name="nname" value="'.$getitem['name'].'"/>
+    <input class="form-control " type="text"  name="fname" value="'.$getitem['fnname'].'"/>
+    <label class="mt-3">Last Name</label>
+    <input class="form-control " type="text"  name="lname" value="'.$getitem['lnname'].'"/>
+
     <label class="mt-3">Tele-Number</label>
-    <input class="form-control " type="text" placeholder="enter the tele number" name="tnum" value="'.$getitem['telnum'].'"/>
+    <input class="form-control " type="text"  name="tnum" value="'.$getitem['telnum'].'"/>
     <button class="btn btn-success mt-3 ml-1" type="submit" name="edit">Edit the Number</button>
 
   </form>';
   if(isset($_GET['edit'])){
-      $newname=$_GET['nname'];
+      $newfname=$_GET['fname'];
+      $newlname=$_GET['lname'];
       $newnum=$_GET['tnum'];
       
       require_once "dbcontact.php";
-      $update=$database->prepare("UPDATE nums SET name='$newname', telnum='$newnum' WHERE numid=$numid");
+      $update=$database->prepare("UPDATE nums SET fnname='$newfname', lnname='$newlname', telnum='$newnum' WHERE numid=$numid");
       
-      if($update->execute()){
-        
+      if($update->execute() ){
+        if($update->rowCount()==1){
+       // echo '<script>alert("the name has been updated successfully");</script>';
  
-        echo '<div class="alert alert-success mt-3">the number data updated successfully</div>';
-        header("Location:edit.php");
+       header("Location:edit.php?success=1");
+      }
+      /*  echo '<script>
+                 setTimeout(function(){
+                    window.location.href = "edit.php";
+                 }, 1000);
+              </script>';
+      */
+      elseif($update->rowCount()==0){
+        echo '<div class="alert alert-warning mt-3">the number has no updated </div>';
+
+      }
+
+      }else{
+        echo '<div class="alert alert-danger mt-3">the number data failed to update </div>';
+
       }
 
   }
@@ -67,6 +86,8 @@
     
 
 <?php
+
+
 if(isset($_POST['signout'])){
     session_unset();
     header("Location:index.php");
@@ -76,6 +97,12 @@ elseif(isset($_POST['back'])){
     header("Location:user.php");
 
 }
+elseif(isset( $_GET['success']) ){
+  if($_GET['success']==1){
+  echo '<div class="alert m-4 alert-success mt-3">the number data updated successfully</div>';
+}
+}
+
 ?>
 </body>
 </html>

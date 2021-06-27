@@ -24,7 +24,7 @@
 </div>
 
 <div class="container mt-3">
-  <form method="GET" class="w-50" name="sign">
+  <form method="GET" class="w-50 mb-5" name="sign">
     <label >FirstName</label>
     <input class="form-control " type="text" placeholder="enter your firstname" name="fname" required/>
     <label class="mt-3">LastName</label>
@@ -36,17 +36,30 @@
     <input class="form-control " type="number" placeholder="enter your tele number" name="telnum" required/>
     <label class="mt-3">Password</label>
     <input class="form-control " type="password" placeholder="enter your password" name="pass" required/>
-    <button class="btn btn-success mt-3 ml-1" type="submit" name="sign" onclick="checknum(event)">Sign Up</button>
+    <label class="mt-3">confirm-Password</label>
+    <input class="form-control " type="password" placeholder="confirm your password" name="conpass"  required/>
+
+    <div class="row w-75">
+    <button class="btn btn-success mt-3 ml-3 col" type="submit" name="sign" onclick="checknum(event)">Sign Up</button>
+  </form>
+
+  <form method="POST" class="inline-form ">
+  <button class="btn btn-primary mt-3 ml-1 col " type="submit" name="login">have an account</button>
 
   </form>
+  </div>
   <?php
   if(isset($_GET['sign'])){
+    require_once "dbcontact.php";
     $fname=$_GET['fname'];
     $lname=$_GET['lname'];
     $city=$_GET['city'];
     $telnum=$_GET['telnum'];
     $pass=$_GET['pass'];
-    require_once "dbcontact.php";
+    $check=$database->prepare("SELECT * FROM users WHERE fname='$fname' AND lname='$lname' OR telnum='$telnum'");
+    $check->execute();
+    if($check->rowCount() ==0){
+    
     $adduser=$database->prepare("INSERT INTO users(fname, lname, city, telnum, pass) VALUES('$fname', '$lname', '$city', '$telnum', '$pass')");
     $adduser->execute();
     $getid=$database->prepare("SELECT userid FROM users WHERE fname='$fname' AND lname='$lname' AND telnum='$telnum' AND pass='$pass'");
@@ -55,6 +68,14 @@
     session_start();
     $_SESSION['userid']=$getid['userid'];
     header("Location:user.php");
+  }else{
+    echo '<div class="alert alert-danger mt-3 w-75">
+This account has already created!
+    </div>';
+  }
+  }
+  elseif(isset($_POST['login'])){
+    header("Location:login.php");
 
   }
   ?>
@@ -66,8 +87,15 @@
 <script>
   function checknum(event){
     var num=document.sign.telnum.value;
+    var pass=document.sign.pass.value;
+    var conpass=document.sign.conpass.value;
     if(num.length!=10 && !num.startsWith("09")){
       alert("you have enterd an invalid number!");
+      event.preventDefault();
+      return (false);
+    }
+    else if(pass != conpass) {
+      alert("your password confirmation wrong!");
       event.preventDefault();
       return (false);
     }
